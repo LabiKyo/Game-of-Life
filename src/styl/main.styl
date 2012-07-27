@@ -1,0 +1,35 @@
+@import nib
+global-reset()
+
+cell-size = 9px
+border = solid #eee 1px
+
+body
+  background: #eee
+  text-align: center
+
+#canvas
+  float: left
+  padding: 50px
+
+.row
+  line-height: cell-size
+  height: cell-size
+  .cell
+    height: cell-size
+    width: cell-size
+    display: inline-block
+    background: #fff
+
+  .cell.live
+    background: #000
+
+#canvas.grid
+  border-right: border
+  border-bottom: border
+  .row
+    .cell
+      height: cell-size - 1
+      width: cell-size - 1
+      border-left: border
+      border-top: border
