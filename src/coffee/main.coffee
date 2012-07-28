@@ -24,10 +24,10 @@ DIRECTION = [
 map = []
 map[0] = []
 current_step = 0
+interval_id = null
 
 $ ->
   # init canvas and data
-
   canvas = document.createElement 'div'
   canvas.id = 'canvas'
   canvas.className = 'grid'
@@ -39,12 +39,11 @@ $ ->
   cell_div.className = 'cell'
 
   for row in [0...HEIGHT]
-    map[0][row] = []
+    map[0][row] = get_filled_array(WIDTH, false)
     row_cloned = row_div.cloneNode()
     row_cloned.id = row
     canvas.appendChild row_cloned
     for col in [0...WIDTH]
-      map[0][row][col] = false
       cell_cloned = cell_div.cloneNode()
       cell_cloned.id = "#{row}-#{col}"
       cell_cloned.dataset.row = row
@@ -55,12 +54,15 @@ $ ->
   make_cell_live(1, 1)
   make_cell_live(1, 2)
   make_cell_live(1, 3)
-  setInterval next_step, INTERVAL
 
   # event binding
   $('#canvas').on 'click', '.cell', (e) ->
     cell = e.currentTarget
     make_cell_live(cell.dataset.row, cell.dataset.col)
+
+  $('#start').on 'click', start
+  $('#stop').on 'click', stop
+  $('#next').on 'click', next_step
 
 # utils
 make_cell_live = (row, col) ->
@@ -76,18 +78,47 @@ make_cell_dead = (row, col) ->
     cell.classList.remove 'live'
 
 next_step = ->
+  sum = []
+  i = HEIGHT
+  while (i--)
+    a = get_filled_array(WIDTH, 0)
+    sum.push(a)
+
   current = map[current_step]
   ++current_step
   map[current_step] = $.extend(true, [], current)
+
+  # count sum
   for row, i in current
     for cell, j in row
-      sum = 0
-      for dir in DIRECTION
-        if current[i + dir.y]?[j + dir.x]
-          ++sum
+      if cell
+        for dir in DIRECTION
+          ++sum[i+dir.y]?[j+dir.x]
+
+  for row, i in current
+    for cell, j in row
+      cell_sum = sum[i][j]
       if cell # current live
-        unless 2 <= sum <= 3
+        unless 2 <= cell_sum <= 3
           make_cell_dead(i, j)
       else # current dead
-        if sum is 3
+        if cell_sum is 3
           make_cell_live(i, j)
+
+  false
+
+start = ->
+  if interval_id is null
+    interval_id = setInterval next_step, INTERVAL
+  false
+
+stop = ->
+  clearInterval interval_id
+  interval_id = null
+  false
+
+get_filled_array = (length, value) ->
+  array = []
+  while length--
+    array.push value
+  array
