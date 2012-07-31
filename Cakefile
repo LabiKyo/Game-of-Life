@@ -14,7 +14,7 @@ compile = (type, description, script) ->
 
 compile 'jade', 'compile jade to html', 'jade -O public src/jade/index.jade'
 
-compile 'coffee', 'compile coffee-script to javascript', 'coffee -bj public/js/main.js -c src/coffee/main.coffee'
+compile 'coffee', 'compile coffee-script to javascript', 'coffee -bo public/js -c src/coffee/*.coffee'
 
 compile 'stylus', 'compile stylus to css', 'stylus -u nib -o public/css/ -c src/styl/main.styl'
 

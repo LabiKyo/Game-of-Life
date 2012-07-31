@@ -1,0 +1,20 @@
+{
+  "name": "Game_of_Life",
+  "version": "0.0.1",
+  "author": "Labi Kyo <labikyo@gmail.com>",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LabiKyo/Game-of-Life"
+  },
+  "dependencies": {
+    "nib": "*",
+    "sty": "*"
+  },
+  "devDependencies": {
+  },
+  "engine": {
+    "node": ">=0.6.18"
+  }
+}
